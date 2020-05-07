@@ -13,7 +13,6 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.kaspicourse.R
-import com.google.android.material.textfield.TextInputLayout
 
 private const val MESSAGE_INSERT = "i_message_key"
 private const val MESSAGE_EDITOR = "e_message_key"
@@ -37,8 +36,6 @@ class MainFragment : Fragment() {
         tvInsert = view.findViewById(R.id.tvInsert)!!
         tvResult = view.findViewById(R.id.tvResult)!!
         tvEdit = view.findViewById(R.id.editText)!!
-        val layout = context?.let { TextInputLayout(it) }
-        layout?.setBackgroundResource(R.color.design_default_color_on_primary)
 
         tvInsert.visibility = View.GONE
         tvResult.visibility = View.GONE
