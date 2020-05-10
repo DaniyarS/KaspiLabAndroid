@@ -1,7 +1,6 @@
 package com.example.kaspicourse.fragments
 
 import android.content.SharedPreferences
-import android.graphics.Color
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
@@ -11,19 +10,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.kaspicourse.MessageAdapter
+import com.example.kaspicourse.MessageData
 import com.example.kaspicourse.R
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import kotlinx.android.synthetic.main.fragment_main.*
+import java.lang.StringBuilder
 
-private const val MESSAGE_INSERT = "i_message_key"
-private const val MESSAGE_EDITOR = "e_message_key"
+private const val MESSAGE_LIST = "message_list"
 
 class MainFragment : Fragment() {
 
     private lateinit var btSend: ImageView
-    private lateinit var tvInsert: TextView
-    private lateinit var tvResult: TextView
     private lateinit var tvEdit: EditText
     private var prefs: SharedPreferences? = null
+    private var messages = mutableListOf<MessageData>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,37 +36,63 @@ class MainFragment : Fragment() {
 
         prefs = PreferenceManager.getDefaultSharedPreferences(context)
         btSend = view.findViewById(R.id.btSend)!!
-        tvInsert = view.findViewById(R.id.tvInsert)!!
-        tvResult = view.findViewById(R.id.tvResult)!!
         tvEdit = view.findViewById(R.id.editText)!!
 
-        tvInsert.visibility = View.GONE
-        tvResult.visibility = View.GONE
-
-        btSend.setOnClickListener {
-            if (tvEdit.text != null) {
-                tvInsert.visibility = View.VISIBLE
-                tvInsert.text = tvEdit.text
-                tvResult.text = ""
-                changeToLatin(tvInsert.text.toString())
-                tvEdit.text = null
-            }
+        try {
+            loadJSON()
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
-
-        if (prefs?.getString(MESSAGE_INSERT, "")!=null) {
-            tvInsert.visibility = View.VISIBLE
-            tvInsert.text = prefs?.getString(MESSAGE_INSERT, "")
-            tvResult.text = ""
-            changeToLatin(tvInsert.text.toString())
-            tvEdit.text = null
-        }
-
-        tvEdit.append(prefs?.getString(MESSAGE_EDITOR, ""))
-
+        generate()
+        saveJSON()
         return view
     }
 
-    private fun changeToLatin(text: String) {
+    private fun generate() {
+        val messageAdapter = MessageAdapter()
+        val messageLayoutManager =
+            LinearLayoutManager(activity?.baseContext, LinearLayoutManager.VERTICAL, false)
+        messageLayoutManager.stackFromEnd = true
+        
+        btSend.setOnClickListener {
+            val message = MessageData()
+            message.sendedMessage = tvEdit.text.toString()
+            message.receivedMessage = changeToLatin(tvEdit.text.toString())
+            messages.add(message)
+
+            messageAdapter.setItems(messages)
+
+            messageRecycler.apply {
+                adapter = messageAdapter
+                layoutManager = messageLayoutManager
+            }
+        }
+    }
+
+    private fun saveJSON() {
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val editor: SharedPreferences.Editor? = sharedPreferences?.edit()
+        editor?.clear()
+        val gson = Gson()
+        val json: String = gson.toJson(messages)
+        editor?.putString(MESSAGE_LIST, json)
+        editor?.apply()
+    }
+
+    private fun loadJSON() {
+        val json: String? = prefs?.getString(MESSAGE_LIST, null)
+        val turnsType = object : TypeToken<List<MessageData>>() {}.type
+        val turns = Gson().fromJson<List<MessageData>>(json, turnsType)
+        for (i in 0..turns.size) {
+            messages.add(turns[i])
+        }
+        if (messages == null) {
+            messages = mutableListOf()
+        }
+    }
+
+    private fun changeToLatin(text: String): String {
+        val message = StringBuilder()
 
         val cyrillic: Array<Char> = arrayOf(' ','а','б','в','г','д','е','ё', 'ж','з','и','й','к',
             'л','м','н','о', 'п','р','с','т','у','ф','х', 'ц','ч', 'ш','щ','ъ','ы','ь','э', 'ю',
@@ -83,19 +112,11 @@ class MainFragment : Fragment() {
                 for (j in cyrillic.indices) {
                     Log.d("size", cyrillic.size.toString())
                     if (text[i] == (cyrillic[j])) {
-                        tvResult.append(latin[j])
+                        message.append(latin[j])
                     }
                 }
             }
 
-        tvResult.visibility = View.VISIBLE
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        val editor: SharedPreferences.Editor? = prefs?.edit()
-        editor?.putString(MESSAGE_INSERT, tvInsert.text.toString())
-        editor?.putString(MESSAGE_EDITOR, tvEdit.text.toString())
-        editor?.apply()
+        return message.toString()
     }
 }
