@@ -1,4 +1,4 @@
-package com.example.kaspicourse
+package com.example.kaspicourse.adapters
 
 import android.app.Dialog
 import android.content.Context
@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.kaspicourse.MessageData
+import com.example.kaspicourse.R
 import kotlinx.android.synthetic.main.message_dialog.*
 import kotlinx.android.synthetic.main.message_items.view.*
 
@@ -18,15 +20,15 @@ class MessageAdapter : RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
     private var myDialog: Dialog? = null
     private var context: Context? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         context = parent.context
         return ViewHolder(inflater, parent)
     }
 
-    override fun getItemCount(): Int = message.size ?: 0
+    override fun getItemCount(): Int = message.size
 
-    override fun onBindViewHolder(holder: MessageAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(message[position])
     }
 
@@ -36,7 +38,8 @@ class MessageAdapter : RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
         notifyDataSetChanged()
     }
 
-    inner class ViewHolder(inflater: LayoutInflater, parent: ViewGroup) : RecyclerView.ViewHolder(inflater.inflate(R.layout.message_items, parent, false)) {
+    inner class ViewHolder(inflater: LayoutInflater, parent: ViewGroup) : RecyclerView.ViewHolder(inflater.inflate(
+        R.layout.message_items, parent, false)) {
         private val tvInsert = itemView.tvInsert
         private val tvResult = itemView.tvResult
         private var messageDialog: CardView? = null

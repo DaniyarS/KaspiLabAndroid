@@ -1,12 +1,19 @@
-package com.example.kaspicourse
+package com.example.kaspicourse.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.kaspicourse.ItemMoveCallbackListener
+import com.example.kaspicourse.MessageData
+import com.example.kaspicourse.OnStartDragListener
+import com.example.kaspicourse.R
 import kotlinx.android.synthetic.main.favorite_message_items.view.*
+import java.util.*
 
-class FavoriteMessageAdapter : RecyclerView.Adapter<FavoriteMessageAdapter.ViewHolder>() {
+class FavoriteMessageAdapter(private val startDragListener: OnStartDragListener) : RecyclerView.Adapter<FavoriteMessageAdapter.ViewHolder>(),
+    ItemMoveCallbackListener.Listener {
 
     private val message = mutableListOf<MessageData>()
     private var context: Context? = null
@@ -14,15 +21,21 @@ class FavoriteMessageAdapter : RecyclerView.Adapter<FavoriteMessageAdapter.ViewH
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): FavoriteMessageAdapter.ViewHolder {
+    ): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         context = parent.context
         return ViewHolder(inflater, parent)
     }
 
-    override fun onBindViewHolder(holder: FavoriteMessageAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(message[position])
         holder.delete(position)
+        holder.itemView.btDrag.setOnTouchListener { _, event ->
+            if (event.action == MotionEvent.ACTION_DOWN) {
+                this.startDragListener.onStartDrag(holder)
+            }
+            return@setOnTouchListener true
+        }
     }
 
     override fun getItemCount(): Int = message.size
@@ -50,5 +63,24 @@ class FavoriteMessageAdapter : RecyclerView.Adapter<FavoriteMessageAdapter.ViewH
                 notifyDataSetChanged()
             }
         }
+    }
+
+    override fun onRowMoved(fromPosition: Int, toPosition: Int) {
+        if (fromPosition < toPosition) {
+            for (i in fromPosition until toPosition) {
+                Collections.swap(message, i, i + 1)
+            }
+        } else {
+            for (i in fromPosition downTo toPosition + 1) {
+                Collections.swap(message, i, i - 1)
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition)
+    }
+
+    override fun onRowSelected(itemViewHolder: ViewHolder) {
+    }
+
+    override fun onRowClear(itemViewHolder: ViewHolder) {
     }
 }

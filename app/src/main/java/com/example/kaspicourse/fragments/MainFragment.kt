@@ -12,7 +12,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
-import com.example.kaspicourse.MessageAdapter
+import com.example.kaspicourse.adapters.MessageAdapter
 import com.example.kaspicourse.MessageData
 import com.example.kaspicourse.R
 import com.google.gson.Gson

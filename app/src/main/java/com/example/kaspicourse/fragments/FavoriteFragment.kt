@@ -5,22 +5,21 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.kaspicourse.FavoriteMessageAdapter
+import com.example.kaspicourse.ItemMoveCallbackListener
+import com.example.kaspicourse.adapters.FavoriteMessageAdapter
 import com.example.kaspicourse.MessageData
+import com.example.kaspicourse.OnStartDragListener
 import com.example.kaspicourse.R
-import kotlinx.android.synthetic.main.favorite_message_items.*
-import java.nio.file.Files.delete
 
-/**
- * A simple [Fragment] subclass.
- */
-class FavoriteFragment : Fragment() {
+class FavoriteFragment : Fragment(), OnStartDragListener {
 
     private lateinit var recyclerView: RecyclerView
     private var favoriteMessageAdapter: FavoriteMessageAdapter? = null
     private var message = mutableListOf<MessageData>()
+    private lateinit var touchHelper: ItemTouchHelper
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,13 +30,15 @@ class FavoriteFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         recyclerView = view.findViewById(R.id.favoriteRecycler)
         recyclerView.layoutManager = linearLayoutManager
-        favoriteMessageAdapter = FavoriteMessageAdapter()
+        favoriteMessageAdapter = FavoriteMessageAdapter(this)
         recyclerView.adapter = favoriteMessageAdapter
         generate()
+        val callback: ItemTouchHelper.Callback = ItemMoveCallbackListener(favoriteMessageAdapter!!)
+        touchHelper = ItemTouchHelper(callback)
+        touchHelper.attachToRecyclerView(recyclerView)
     }
 
 
@@ -56,5 +57,11 @@ class FavoriteFragment : Fragment() {
         message = mutableListOf(MessageData(msg1, msg2), MessageData(msg3, msg4), MessageData(msg5, msg6))
 
         favoriteMessageAdapter?.setItems(message)
+    }
+
+    override fun onStartDrag(viewHolder: RecyclerView.ViewHolder?) {
+        if (viewHolder != null) {
+            touchHelper.startDrag(viewHolder)
+        }
     }
 }
