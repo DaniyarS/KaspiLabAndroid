@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSmoothScroller
 import com.example.kaspicourse.MessageAdapter
 import com.example.kaspicourse.MessageData
 import com.example.kaspicourse.R
@@ -38,34 +39,38 @@ class MainFragment : Fragment() {
         btSend = view.findViewById(R.id.btSend)!!
         tvEdit = view.findViewById(R.id.editText)!!
 
-        try {
-            loadJSON()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        generate()
-        saveJSON()
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        loadJSON()
+        generate()
     }
 
     private fun generate() {
         val messageAdapter = MessageAdapter()
-        val messageLayoutManager =
-            LinearLayoutManager(activity?.baseContext, LinearLayoutManager.VERTICAL, false)
+        val messageLayoutManager = LinearLayoutManager(activity?.baseContext, LinearLayoutManager.VERTICAL, false)
         messageLayoutManager.stackFromEnd = true
-        
+        messageRecycler.adapter = messageAdapter
+        messageRecycler.layoutManager = messageLayoutManager
+        messageAdapter.setItems(messages)
+
+        val smoothScroller = object : LinearSmoothScroller(context) {
+            override fun getVerticalSnapPreference(): Int =
+                SNAP_TO_START
+        }
+
         btSend.setOnClickListener {
-            val message = MessageData()
-            message.sendedMessage = tvEdit.text.toString()
-            message.receivedMessage = changeToLatin(tvEdit.text.toString())
-            messages.add(message)
-
-            messageAdapter.setItems(messages)
-
-            messageRecycler.apply {
-                adapter = messageAdapter
-                layoutManager = messageLayoutManager
+            if (tvEdit.text.toString() != "") {
+                val message = MessageData()
+                message.sendedMessage = tvEdit.text.toString()
+                message.receivedMessage = changeToLatin(tvEdit.text.toString())
+                messages.add(message)
+                messageAdapter.setItems(messages)
             }
+            smoothScroller.targetPosition = messages.size - 1
+            messageLayoutManager.startSmoothScroll(smoothScroller)
         }
     }
 
@@ -83,11 +88,11 @@ class MainFragment : Fragment() {
         val json: String? = prefs?.getString(MESSAGE_LIST, null)
         val turnsType = object : TypeToken<List<MessageData>>() {}.type
         val turns = Gson().fromJson<List<MessageData>>(json, turnsType)
-        for (i in 0..turns.size) {
-            messages.add(turns[i])
-        }
-        if (messages == null) {
-            messages = mutableListOf()
+        try {
+            messages.clear()
+            messages.addAll(turns)
+        } catch (e: Exception) {
+
         }
     }
 
@@ -116,7 +121,11 @@ class MainFragment : Fragment() {
                     }
                 }
             }
-
         return message.toString()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        saveJSON()
     }
 }
