@@ -12,8 +12,10 @@ import android.widget.EditText
 import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
+import androidx.recyclerview.widget.RecyclerView
 import com.example.kaspicourse.adapters.MessageAdapter
 import com.example.kaspicourse.MessageData
+import com.example.kaspicourse.MessageItemDecoration
 import com.example.kaspicourse.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -28,6 +30,31 @@ class MainFragment : Fragment() {
     private lateinit var tvEdit: EditText
     private var prefs: SharedPreferences? = null
     private var messages = mutableListOf<MessageData>()
+    private var messageAdapter: MessageAdapter? = null
+    private var messageLayoutManager: LinearLayoutManager? = null
+
+    private val scrollListener = object : RecyclerView.OnScrollListener() {
+        var y = 0
+
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+            y = dy
+        }
+
+        override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+            super.onScrollStateChanged(recyclerView, newState)
+            when (newState) {
+                RecyclerView.SCROLL_STATE_DRAGGING -> {
+                    if (y<=0) {
+                        scrollButton.visibility = View.VISIBLE
+                    } else {
+                        scrollButton.visibility = View.GONE
+                        y = 0
+                    }
+                }
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,16 +72,26 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         loadJSON()
-        generate()
+        setupItems()
     }
 
-    private fun generate() {
-        val messageAdapter = MessageAdapter()
-        val messageLayoutManager = LinearLayoutManager(activity?.baseContext, LinearLayoutManager.VERTICAL, false)
-        messageLayoutManager.stackFromEnd = true
+    override fun onResume() {
+        super.onResume()
+        messageRecycler.addOnScrollListener(scrollListener)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        saveJSON()
+    }
+
+    private fun setupItems() {
+        messageAdapter = MessageAdapter()
+        messageLayoutManager = LinearLayoutManager(activity?.baseContext, LinearLayoutManager.VERTICAL, false)
+        messageLayoutManager!!.stackFromEnd = true
         messageRecycler.adapter = messageAdapter
         messageRecycler.layoutManager = messageLayoutManager
-        messageAdapter.setItems(messages)
+        messageAdapter!!.setItems(messages)
 
         val smoothScroller = object : LinearSmoothScroller(context) {
             override fun getVerticalSnapPreference(): Int =
@@ -67,11 +104,27 @@ class MainFragment : Fragment() {
                 message.sendedMessage = tvEdit.text.toString()
                 message.receivedMessage = changeToLatin(tvEdit.text.toString())
                 messages.add(message)
-                messageAdapter.setItems(messages)
+                messageAdapter!!.setItems(messages)
+                tvEdit.text = null
             }
             smoothScroller.targetPosition = messages.size - 1
-            messageLayoutManager.startSmoothScroll(smoothScroller)
+            messageLayoutManager!!.startSmoothScroll(smoothScroller)
         }
+
+        scrollButton.setOnClickListener {
+            if (messages.size > 50) {
+            messageLayoutManager!!.scrollToPosition(messages.size - 5)
+            smoothScroller.targetPosition = messages.size - 1
+            messageLayoutManager!!.startSmoothScroll(smoothScroller)
+            } else {
+                smoothScroller.targetPosition = messages.size - 1
+                messageLayoutManager!!.startSmoothScroll(smoothScroller)
+            }
+            scrollButton.visibility = View.GONE
+        }
+
+        val itemDecoration = MessageItemDecoration(10, 20)
+        messageRecycler.addItemDecoration(itemDecoration)
     }
 
     private fun saveJSON() {
@@ -113,19 +166,14 @@ class MainFragment : Fragment() {
             "j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","A","B","C","D","E",
             "F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z")
 
-            for (i in text.indices) {
-                for (j in cyrillic.indices) {
-                    Log.d("size", cyrillic.size.toString())
-                    if (text[i] == (cyrillic[j])) {
-                        message.append(latin[j])
-                    }
+        for (i in text.indices) {
+            for (j in cyrillic.indices) {
+                Log.d("size", cyrillic.size.toString())
+                if (text[i] == (cyrillic[j])) {
+                    message.append(latin[j])
                 }
             }
+        }
         return message.toString()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        saveJSON()
     }
 }

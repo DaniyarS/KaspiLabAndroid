@@ -40,6 +40,25 @@ class FavoriteMessageAdapter(private val startDragListener: OnStartDragListener)
 
     override fun getItemCount(): Int = message.size
 
+    override fun onRowMoved(fromPosition: Int, toPosition: Int) {
+        if (fromPosition < toPosition) {
+            for (i in fromPosition until toPosition) {
+                Collections.swap(message, i, i + 1)
+            }
+        } else {
+            for (i in fromPosition downTo toPosition + 1) {
+                Collections.swap(message, i, i - 1)
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition)
+    }
+
+    override fun onRowSelected(itemViewHolder: ViewHolder) {
+    }
+
+    override fun onRowClear(itemViewHolder: ViewHolder) {
+    }
+
     fun setItems(list: List<MessageData>) {
         message.addAll(list)
         notifyDataSetChanged()
@@ -63,24 +82,5 @@ class FavoriteMessageAdapter(private val startDragListener: OnStartDragListener)
                 notifyDataSetChanged()
             }
         }
-    }
-
-    override fun onRowMoved(fromPosition: Int, toPosition: Int) {
-        if (fromPosition < toPosition) {
-            for (i in fromPosition until toPosition) {
-                Collections.swap(message, i, i + 1)
-            }
-        } else {
-            for (i in fromPosition downTo toPosition + 1) {
-                Collections.swap(message, i, i - 1)
-            }
-        }
-        notifyItemMoved(fromPosition, toPosition)
-    }
-
-    override fun onRowSelected(itemViewHolder: ViewHolder) {
-    }
-
-    override fun onRowClear(itemViewHolder: ViewHolder) {
     }
 }
