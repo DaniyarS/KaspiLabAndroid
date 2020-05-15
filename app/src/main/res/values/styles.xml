@@ -1,11 +1,45 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="DayTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="backgroundColor">@color/colorBackground</item>
+        <item name="icon">@drawable/ic_day_mode_icon</item>
+        <item name="backgroundImage">@drawable/background</item>
+        <item name="buttonColor">@color/colorButton</item>
+        <item name="textColor">@color/colorTextMessage</item>
+        <item name="iconColor">@color/colorIcon</item>
+        <item name="sendMessageColor">@color/colorSendMessage</item>
+        <item name="labelTextColor">@color/colorTextLabel</item>
+        <item name="android:windowAnimationStyle">@style/windowAnimationTransaction</item>
     </style>
 
+    <style name="NightTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimaryDarkMode</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">#DB7517</item>
+        <item name="backgroundColor">@color/colorBackgroundDarkMode</item>
+        <item name="icon">@drawable/ic_night_mode_icon</item>
+        <item name="backgroundImage">@drawable/night_background</item>
+        <item name="buttonColor">@color/colorPrimaryDarkMode</item>
+        <item name="textColor">@color/colorTextMessageDarkMode</item>
+        <item name="iconColor">@color/colorIconDarkMode</item>
+        <item name="sendMessageColor">@color/colorSendMessageDarkMode</item>
+        <item name="labelTextColor">@color/colorIconDarkMode</item>
+        <item name="android:windowAnimationStyle">@style/windowAnimationTransaction</item>
+    </style>
+
+    <style name="windowAnimationTransaction">
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+    </style>
+
+    <style name="snackbar_style"  parent="@style/Widget.MaterialComponents.Snackbar">
+        <item name="backgroundTint"> @color/colorIcon </item>
+        <item name="animationMode">slide</item>
+    </style>
 </resources>

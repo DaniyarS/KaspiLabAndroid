@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="46dp"
         app:itemIconTint="@drawable/selector"
-        android:background="#FFFFFF"
+        android:background="?attr/backgroundColor"
         app:labelVisibilityMode="unlabeled"
         android:elevation="10dp"
         app:menu="@menu/nav_items" />

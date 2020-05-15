@@ -11,6 +11,8 @@ import com.example.kaspicourse.adapters.FavoriteMessageAdapter
 import com.example.kaspicourse.MessageData
 import com.example.kaspicourse.OnStartDragListener
 import com.example.kaspicourse.R
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.fragment_favorite.*
 
 class FavoriteFragment : Fragment(R.layout.fragment_favorite), OnStartDragListener {
 
@@ -26,6 +28,9 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite), OnStartDragListen
         recyclerView.layoutManager = linearLayoutManager
         favoriteMessageAdapter = FavoriteMessageAdapter(this) {position ->
             favoriteMessageAdapter?.removeItem(position)
+            Snackbar.make(favoriteContainer, R.string.snackbar, 3000).setAction(R.string.snackbar_action){
+
+            }.show()
         }
         recyclerView.adapter = favoriteMessageAdapter
         updateFavorite()

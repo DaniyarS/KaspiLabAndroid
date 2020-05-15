@@ -2,7 +2,8 @@ package com.example.kaspicourse
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.FrameLayout
+import android.util.Log
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.example.kaspicourse.fragments.*
@@ -12,10 +13,19 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val themePreferences = ThemePreferences(this)
+        val themeState = themePreferences.getThemeState()
+        if (themeState == "dark") {
+            setTheme(R.style.NightTheme)
+            Log.d("SetTheme", "set theme works")
+        } else {
+            setTheme(R.style.DayTheme)
+            Log.d("SetTheme", "set theme works")
+        }
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         mainNav.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
+        setFragment(MainFragment())
     }
 
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener {

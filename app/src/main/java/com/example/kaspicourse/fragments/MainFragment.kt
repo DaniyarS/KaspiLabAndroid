@@ -1,6 +1,11 @@
 package com.example.kaspicourse.fragments
 
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.Resources
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
@@ -10,17 +15,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
+import com.example.kaspicourse.*
 import com.example.kaspicourse.adapters.MessageAdapter
-import com.example.kaspicourse.MessageData
-import com.example.kaspicourse.MessageItemDecoration
-import com.example.kaspicourse.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.fragment_main.*
 import java.lang.StringBuilder
+import kotlin.system.exitProcess
 
 private const val MESSAGE_LIST = "message_list"
 
@@ -32,7 +37,7 @@ class MainFragment : Fragment() {
     private var messages = mutableListOf<MessageData>()
     private var messageAdapter: MessageAdapter? = null
     private var messageLayoutManager: LinearLayoutManager? = null
-
+    private var click = 0
     private val scrollListener = object : RecyclerView.OnScrollListener() {
         var y = 0
 
@@ -71,6 +76,21 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        themeButton.setOnClickListener {
+            val themePreferences = context?.let { it1 -> ThemePreferences(it1) }
+            if ( AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_NO ) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                themePreferences?.setThemeState("dark")
+                restartApp()
+                Log.d("click", "worksss")
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                restartApp()
+                themePreferences?.setThemeState("white")
+                Log.d("click", "works")
+            }
+        }
         loadJSON()
         setupItems()
     }
@@ -176,4 +196,10 @@ class MainFragment : Fragment() {
         }
         return message.toString()
     }
+
+    private fun restartApp() {
+        val intent = Intent(context, MainActivity::class.java)
+        startActivity(intent)
+    }
+
 }
