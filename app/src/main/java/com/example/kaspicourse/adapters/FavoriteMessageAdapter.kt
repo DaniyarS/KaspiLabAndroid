@@ -12,7 +12,7 @@ import com.example.kaspicourse.R
 import kotlinx.android.synthetic.main.favorite_message_items.view.*
 import java.util.*
 
-class FavoriteMessageAdapter(private val startDragListener: OnStartDragListener) : RecyclerView.Adapter<FavoriteMessageAdapter.ViewHolder>(),
+class FavoriteMessageAdapter(private val startDragListener: OnStartDragListener, private val clickListener: (position: Int) -> Unit) : RecyclerView.Adapter<FavoriteMessageAdapter.ViewHolder>(),
     ItemMoveCallbackListener.Listener {
 
     private val message = mutableListOf<MessageData>()
@@ -28,8 +28,7 @@ class FavoriteMessageAdapter(private val startDragListener: OnStartDragListener)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(message[position])
-        holder.delete(position)
+        holder.bind(message[position], clickListener)
         holder.itemView.btDrag.setOnTouchListener { _, event ->
             if (event.action == MotionEvent.ACTION_DOWN) {
                 this.startDragListener.onStartDrag(holder)
@@ -64,22 +63,23 @@ class FavoriteMessageAdapter(private val startDragListener: OnStartDragListener)
         notifyDataSetChanged()
     }
 
+    fun removeItem(position: Int) {
+        message.removeAt(position)
+        notifyDataSetChanged()
+    }
+
     inner class ViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
         RecyclerView.ViewHolder(inflater.inflate(R.layout.favorite_message_items, parent, false)) {
         private val tvInsert = itemView.tvSend
         private val tvResult = itemView.tvReceived
         private val btDelete = itemView.btDelete
 
-        fun bind(message: MessageData) {
+        fun bind(message: MessageData, clickListener: (position: Int) -> Unit) {
             tvInsert.text = message.sendedMessage
             tvResult.text = message.receivedMessage
 
-        }
-
-        fun delete(index: Int) {
             btDelete.setOnClickListener {
-                message.removeAt(index)
-                notifyDataSetChanged()
+                clickListener(adapterPosition)
             }
         }
     }

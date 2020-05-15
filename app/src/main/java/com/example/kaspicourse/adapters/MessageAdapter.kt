@@ -38,7 +38,8 @@ class MessageAdapter : RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
         notifyDataSetChanged()
     }
 
-    inner class ViewHolder(inflater: LayoutInflater, parent: ViewGroup) : RecyclerView.ViewHolder(inflater.inflate(
+    inner class ViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
+        RecyclerView.ViewHolder(inflater.inflate(
         R.layout.message_items, parent, false)) {
         private val tvInsert = itemView.tvInsert
         private val tvResult = itemView.tvResult
@@ -48,15 +49,19 @@ class MessageAdapter : RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
             messageDialog = itemView.findViewById(R.id.messageDialog)
             tvInsert.text = message.sendedMessage
             tvResult.text = message.receivedMessage
-            myDialog = context?.let { Dialog(it) }
-            myDialog!!.setContentView(R.layout.message_dialog)
-            myDialog!!.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            myDialog?.let { it ->
+                myDialog = context?.let { Dialog(it) }
+                it.setContentView(R.layout.message_dialog)
+                it.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            }
+
             tvInsert.setOnClickListener {
                 myDialog!!.show()
                 myDialog!!.tvFavorite.setOnClickListener {
                     Toast.makeText(context,"Clicked", Toast.LENGTH_SHORT).show()
                 }
             }
+
             tvResult.setOnClickListener {
                 myDialog!!.show()
             }

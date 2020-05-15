@@ -11,12 +11,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    private val translateFragment = TranslateFragment()
-    private val favoriteFragment = FavoriteFragment()
-    private val mainFragment = MainFragment()
-    private val searchFragment = SearchFragment()
-    private val accountFragment = AccountFragment()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -27,23 +21,23 @@ class MainActivity : AppCompatActivity() {
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener {
         when(it.itemId){
             R.id.navTranslate -> {
-                setFragment(translateFragment)
+                setFragment(TranslateFragment())
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navFavorite -> {
-                setFragment(favoriteFragment)
+                setFragment(FavoriteFragment())
                 return@OnNavigationItemSelectedListener  true
             }
             R.id.navMain ->{
-                setFragment(mainFragment)
+                setFragment(MainFragment())
                 return@OnNavigationItemSelectedListener  true
             }
             R.id.navSearch ->{
-                setFragment(searchFragment)
+                setFragment(SearchFragment())
                 return@OnNavigationItemSelectedListener  true
             }
             R.id.navAccount ->{
-                setFragment(accountFragment)
+                setFragment(AccountFragment())
                 return@OnNavigationItemSelectedListener  true
             }
         }
