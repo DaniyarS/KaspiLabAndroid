@@ -1,11 +1,7 @@
 package com.example.kaspicourse.fragments
 
-import android.app.AlarmManager
-import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.res.Resources
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
@@ -25,7 +21,6 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.fragment_main.*
 import java.lang.StringBuilder
-import kotlin.system.exitProcess
 
 private const val MESSAGE_LIST = "message_list"
 
@@ -37,7 +32,6 @@ class MainFragment : Fragment() {
     private var messages = mutableListOf<MessageData>()
     private var messageAdapter: MessageAdapter? = null
     private var messageLayoutManager: LinearLayoutManager? = null
-    private var click = 0
     private val scrollListener = object : RecyclerView.OnScrollListener() {
         var y = 0
 
