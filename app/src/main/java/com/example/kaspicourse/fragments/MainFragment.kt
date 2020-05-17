@@ -2,15 +2,19 @@ package com.example.kaspicourse.fragments
 
 import android.content.Intent
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.PopupMenu
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
@@ -68,6 +72,7 @@ class MainFragment : Fragment() {
         return view
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -85,6 +90,14 @@ class MainFragment : Fragment() {
                 Log.d("click", "works")
             }
         }
+
+        moreButton.setOnClickListener {
+            val popupMenu = PopupMenu(context, it)
+            popupMenu.inflate(R.menu.toolbar_items)
+            popupMenu.setForceShowIcon(true)
+            popupMenu.show()
+        }
+
         loadJSON()
         setupItems()
     }
@@ -195,5 +208,6 @@ class MainFragment : Fragment() {
         val intent = Intent(context, MainActivity::class.java)
         startActivity(intent)
     }
+
 
 }

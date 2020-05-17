@@ -1,23 +1,18 @@
 package com.example.kaspicourse.adapters
 
-import android.app.Dialog
 import android.content.Context
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import android.widget.Toast
-import androidx.cardview.widget.CardView
+import android.os.Build
+import android.view.*
+import android.widget.PopupMenu
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kaspicourse.MessageData
 import com.example.kaspicourse.R
-import kotlinx.android.synthetic.main.message_dialog.*
 import kotlinx.android.synthetic.main.message_items.view.*
 
 class MessageAdapter : RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
 
     private val message = mutableListOf<MessageData>()
-    private var myDialog: Dialog? = null
     private var context: Context? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -39,32 +34,34 @@ class MessageAdapter : RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
     }
 
     inner class ViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
-        RecyclerView.ViewHolder(inflater.inflate(
-        R.layout.message_items, parent, false)) {
+        View.OnCreateContextMenuListener,
+        RecyclerView.ViewHolder(
+            inflater.inflate(
+                R.layout.message_items, parent, false
+            )
+        ) {
+
         private val tvInsert = itemView.tvInsert
         private val tvResult = itemView.tvResult
-        private var messageDialog: CardView? = null
 
         fun bind(message: MessageData) {
-            messageDialog = itemView.findViewById(R.id.messageDialog)
             tvInsert.text = message.sendedMessage
             tvResult.text = message.receivedMessage
-            myDialog?.let { it ->
-                myDialog = context?.let { Dialog(it) }
-                it.setContentView(R.layout.message_dialog)
-                it.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            }
 
-            tvInsert.setOnClickListener {
-                myDialog!!.show()
-                myDialog!!.tvFavorite.setOnClickListener {
-                    Toast.makeText(context,"Clicked", Toast.LENGTH_SHORT).show()
-                }
-            }
+            tvInsert.setOnCreateContextMenuListener(this)
+            tvResult.setOnCreateContextMenuListener(this)
+        }
 
-            tvResult.setOnClickListener {
-                myDialog!!.show()
-            }
+        @RequiresApi(Build.VERSION_CODES.Q)
+        override fun onCreateContextMenu(
+            menu: ContextMenu?,
+            v: View?,
+            menuInfo: ContextMenu.ContextMenuInfo?
+        ) {
+            val popupMenu = PopupMenu(context, v)
+            popupMenu.inflate(R.menu.message_items)
+            popupMenu.setForceShowIcon(true)
+            popupMenu.show()
         }
     }
 }

@@ -3,6 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     >
 
-    <item android:title="Item" />
-    <item android:title="Item" />
+    <item
+        android:icon="@drawable/ic_vector"
+        android:title="Avtorǵa hat jazý" />
+    <item
+        android:icon="@drawable/ic_share_black_24dp"
+        android:title="Qosymshamen bólіsý" />
+    <item
+        android:icon="@drawable/ic_vector_share"
+        android:title="Maǵan qosymsha kerek" />
 </menu>
