@@ -1,13 +1,14 @@
 package com.example.kaspicourse
 
 import android.content.Context
+import android.content.SharedPreferences
 
 const val PREFERENCE = "myPreference"
 const val THEME_STATE = "ThemeState"
 
 class ThemePreferences (context: Context) {
 
-    val preference = context.getSharedPreferences(PREFERENCE,Context.MODE_PRIVATE)
+    private val preference: SharedPreferences = context.getSharedPreferences(PREFERENCE, Context.MODE_PRIVATE)
 
     fun getThemeState() : String? {
         return preference.getString(THEME_STATE, "White")

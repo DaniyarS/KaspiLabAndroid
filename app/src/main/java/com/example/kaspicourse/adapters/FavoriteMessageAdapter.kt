@@ -6,10 +6,9 @@ import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kaspicourse.ItemMoveCallbackListener
-import com.example.kaspicourse.MessageData
+import com.example.kaspicourse.models.MessageData
 import com.example.kaspicourse.OnStartDragListener
 import com.example.kaspicourse.R
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.favorite_message_items.view.*
 import java.util.*
 

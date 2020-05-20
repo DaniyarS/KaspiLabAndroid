@@ -31,6 +31,7 @@
         <item name="sendMessageColor">@color/colorSendMessageDarkMode</item>
         <item name="labelTextColor">@color/colorIconDarkMode</item>
         <item name="android:windowAnimationStyle">@style/windowAnimationTransaction</item>
+
     </style>
 
     <style name="windowAnimationTransaction">
@@ -39,7 +40,9 @@
     </style>
 
     <style name="snackbar_style"  parent="@style/Widget.MaterialComponents.Snackbar">
-        <item name="backgroundTint"> @color/colorIcon </item>
+        <item name="background"> @color/colorIcon </item>
         <item name="animationMode">slide</item>
     </style>
+
+
 </resources>

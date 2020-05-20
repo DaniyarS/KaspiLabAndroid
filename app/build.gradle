@@ -23,6 +23,15 @@ android {
         }
     }
 
+//    compileOptions {
+//        sourceCompatability JavaVersion.VERSION_1_8
+//        targetCompatability JavaVersion.VERSION_1_8
+//    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
 }
 
 dependencies {
@@ -38,4 +47,17 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     implementation 'com.google.code.gson:gson:2.8.6'
+
+
+    //glide & exoPlayer
+
+    def glideVersion = "4.11.0"
+    def exoPlayerVersion = "2.8.4"
+
+    // ExoPlayer
+    implementation "com.google.android.exoplayer:exoplayer:$exoPlayerVersion"
+
+    // Glide
+    implementation "com.github.bumptech.glide:glide:$glideVersion"
+    annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
 }

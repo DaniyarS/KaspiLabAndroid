@@ -6,7 +6,7 @@ import android.view.*
 import android.widget.PopupMenu
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
-import com.example.kaspicourse.MessageData
+import com.example.kaspicourse.models.MessageData
 import com.example.kaspicourse.R
 import kotlinx.android.synthetic.main.message_items.view.*
 

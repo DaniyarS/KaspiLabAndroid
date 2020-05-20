@@ -1,6 +1,4 @@
-package com.example.kaspicourse
-
-import android.os.Message
+package com.example.kaspicourse.models
 
 data class MessageData(
     var sendedMessage: String? = null,

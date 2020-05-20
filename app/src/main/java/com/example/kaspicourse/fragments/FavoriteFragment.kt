@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kaspicourse.ItemMoveCallbackListener
 import com.example.kaspicourse.adapters.FavoriteMessageAdapter
-import com.example.kaspicourse.MessageData
+import com.example.kaspicourse.models.MessageData
 import com.example.kaspicourse.OnStartDragListener
 import com.example.kaspicourse.R
 import com.google.android.material.snackbar.Snackbar
@@ -59,7 +59,14 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite), OnStartDragListen
         val msg6 = "Abai (Ibrahim) Kunanbayev (1845-1904) - poet, educator, founder of written Kazakh" +
                 " literature, Kazakh literary language, philosopher, composer"
 
-        message = mutableListOf(MessageData(msg1, msg2), MessageData(msg3, msg4), MessageData(msg5, msg6))
+        message = mutableListOf(
+            MessageData(
+                msg1,
+                msg2
+            ),
+            MessageData(msg3, msg4),
+            MessageData(msg5, msg6)
+        )
 
         favoriteMessageAdapter?.setItems(message)
     }

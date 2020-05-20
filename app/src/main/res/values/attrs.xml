@@ -10,4 +10,9 @@
         <attr name="icon" format="reference"/>
         <attr name="labelTextColor" format="color"/>
     </declare-styleable>
+
+    <declare-styleable name="VideoPlayerView">
+        <attr name="isSeekBarVisible" format="boolean"/>
+        <attr name="isPlayButtonVisible" format="boolean"/>
+    </declare-styleable>
 </resources>
