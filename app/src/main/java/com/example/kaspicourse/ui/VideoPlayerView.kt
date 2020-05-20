@@ -1,9 +1,11 @@
 package com.example.kaspicourse.ui
 
 import android.content.Context
+import android.net.Uri
 import android.os.Handler
 import android.util.AttributeSet
 import android.widget.FrameLayout
+import android.widget.SeekBar
 import androidx.core.view.isVisible
 import com.example.kaspicourse.R
 import kotlinx.android.synthetic.main.view_videplayer.view.*
@@ -35,12 +37,27 @@ class VideoPlayerView
             playButton.isVisible = isPlayButtonVisible
             pauseButton.isVisible = isPauseButtonVisible
             typedArray.recycle()
+            seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {}
+
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                    videoView.seekTo(seekBar?.progress ?: 0)
+                    videoView.start()
+                }
+            })
         }
     }
 
     fun play(url: String) {
-        videoView.setVideoPath(url)
+        val path = Uri.parse(url)
+        videoView.setVideoURI(path)
         videoView.start()
+        isPlayButtonVisible = false
+        isPauseButtonVisible = true
+        Thread.sleep(5000)
+        isPauseButtonVisible = false
         videoView.setOnPreparedListener {
             seekBar.max = it.duration
             listenPlayerTrack()
@@ -56,4 +73,5 @@ class VideoPlayerView
         }
         handlerView?.postDelayed(runnable, 100)
     }
+
 }

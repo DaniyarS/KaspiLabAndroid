@@ -60,10 +60,7 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite), OnStartDragListen
                 " literature, Kazakh literary language, philosopher, composer"
 
         message = mutableListOf(
-            MessageData(
-                msg1,
-                msg2
-            ),
+            MessageData(msg1, msg2),
             MessageData(msg3, msg4),
             MessageData(msg5, msg6)
         )

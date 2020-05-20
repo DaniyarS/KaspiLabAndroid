@@ -14,15 +14,6 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-    <View
-        android:id="@+id/view2"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?attr/buttonColor"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
-
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/mainNav"
         android:layout_width="match_parent"

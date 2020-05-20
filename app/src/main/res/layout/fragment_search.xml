@@ -66,15 +66,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingStart="10dp"
-            android:paddingTop="15dp"
-            android:paddingEnd="10dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingTop="15dp">
 
             <EditText
                 android:id="@+id/editText2"
                 android:layout_width="match_parent"
                 android:layout_height="47dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
                 android:background="@drawable/rounded_edittext"
                 android:drawableStart="@drawable/ic_search_black_24dp"
                 android:drawablePadding="6dp"
@@ -90,12 +90,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/searchRecycler"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="15dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editText2" />
+                android:layout_height="599dp"
+                android:layout_marginTop="15dp" />
 
         </LinearLayout>
 
