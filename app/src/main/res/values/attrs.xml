@@ -14,5 +14,6 @@
     <declare-styleable name="VideoPlayerView">
         <attr name="isSeekBarVisible" format="boolean"/>
         <attr name="isPlayButtonVisible" format="boolean"/>
+        <attr name="isPauseButtonVisible" format="boolean"/>
     </declare-styleable>
 </resources>

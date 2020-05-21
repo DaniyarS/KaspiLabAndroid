@@ -24,13 +24,13 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private fun updateVideoList() {
         val videoURL1 = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-        val videoTitle1 = "Kelinka Sabina 2, 2020"
+        val videoTitle1 = "Kelinka Sabina 1, 2017"
 
-        val videoURL2 = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-        val videoTitle2 = "Kelinka Sabina 2, 2020"
+        val videoURL2 = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
+        val videoTitle2 = "Побег из аула 2, 2018"
 
-        val videoURL3 = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-        val videoTitle3 = "Kelinka Sabina 2, 2020"
+        val videoURL3 = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+        val videoTitle3 = "Kelinka Sabina 3, 2020"
 
         videoObjects = mutableListOf(
             VideoObjects(videoTitle1, videoURL1),

@@ -1,5 +1,6 @@
 package com.example.kaspicourse.ui
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
 import android.os.Handler
@@ -10,6 +11,7 @@ import androidx.core.view.isVisible
 import com.example.kaspicourse.R
 import kotlinx.android.synthetic.main.view_videplayer.view.*
 
+@SuppressLint("SetTextI18n")
 class VideoPlayerView
 @JvmOverloads constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int = 0) :
     FrameLayout(context, attrs, defStyleAttr) {
@@ -37,36 +39,36 @@ class VideoPlayerView
             playButton.isVisible = isPlayButtonVisible
             pauseButton.isVisible = isPauseButtonVisible
             typedArray.recycle()
-            seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {}
-
-                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-
-                override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                    videoView.seekTo(seekBar?.progress ?: 0)
-                    videoView.start()
-                }
-            })
         }
+        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                seekBar?.progress = videoView.currentPosition
+                timeTextView.text = "${seekBar?.progress}" + "${videoView.duration}"
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                timeTextView.text = "${seekBar?.progress}" + "${videoView.duration}"
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                videoView.seekTo(seekBar?.progress ?: 0)
+                videoView.start()
+            }
+        })
     }
 
     fun play(url: String) {
         val path = Uri.parse(url)
-        videoView.setVideoURI(path)
+        videoView.setVideoPath(url/*context.assets.open("sample.mp4").toString()/*path*/*/)
         videoView.start()
-        isPlayButtonVisible = false
-        isPauseButtonVisible = true
-        Thread.sleep(5000)
-        isPauseButtonVisible = false
-        videoView.setOnPreparedListener {
-            seekBar.max = it.duration
-            listenPlayerTrack()
-        }
+        playButton.isVisible = false
+
+        seekBar.max = videoView.duration
+        listenPlayerTrack()
     }
 
 
-
-    private fun listenPlayerTrack(){
+    private fun listenPlayerTrack() {
         runnable = Runnable {
             seekBar.progress = videoView.currentPosition
             handlerView?.postDelayed(runnable, 100)
