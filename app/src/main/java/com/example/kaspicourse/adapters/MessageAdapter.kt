@@ -1,10 +1,14 @@
 package com.example.kaspicourse.adapters
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import android.view.*
 import android.widget.PopupMenu
 import androidx.annotation.RequiresApi
+import androidx.appcompat.view.menu.MenuBuilder
+import androidx.appcompat.view.menu.MenuPopupHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kaspicourse.models.MessageData
 import com.example.kaspicourse.R
@@ -52,16 +56,26 @@ class MessageAdapter : RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
             tvResult.setOnCreateContextMenuListener(this)
         }
 
-        @RequiresApi(Build.VERSION_CODES.Q)
+        @SuppressLint("RestrictedApi")
+       // @RequiresApi(Build.VERSION_CODES.Q)
         override fun onCreateContextMenu(
             menu: ContextMenu?,
             v: View?,
             menuInfo: ContextMenu.ContextMenuInfo?
         ) {
-            val popupMenu = PopupMenu(context, v)
-            popupMenu.inflate(R.menu.message_items)
-            popupMenu.setForceShowIcon(true)
-            popupMenu.show()
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                val popupMenu = PopupMenu(context, v)
+                popupMenu.inflate(R.menu.message_items)
+                popupMenu.setForceShowIcon(true)
+                popupMenu.show()
+            } else {
+                val menuBuilder = MenuBuilder(context)
+                val menuInflater = MenuInflater(context)
+                menuInflater.inflate(R.menu.message_items, menuBuilder)
+                val popupMenuHelper = context?.let { MenuPopupHelper(it, menuBuilder) }
+                popupMenuHelper?.setForceShowIcon(true)
+                popupMenuHelper?.show()
+            }
         }
     }
 }
